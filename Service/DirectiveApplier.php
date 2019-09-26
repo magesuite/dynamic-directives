@@ -21,6 +21,7 @@ class DirectiveApplier
 
     public function apply($text)
     {
+        $text = html_entity_decode($text);
         $directives = $this->directiveParser->getDirectives($text);
 
         if (empty($directives)) {
