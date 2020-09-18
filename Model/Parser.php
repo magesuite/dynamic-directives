@@ -56,6 +56,7 @@ class Parser implements ParserInterface
 
     private function parseArguments($argumentsString)
     {
+        $argumentsString = $this->escapeXml($argumentsString);
         $xml = new \SimpleXMLElement("<element $argumentsString/>");
 
         $arguments = [];
@@ -65,6 +66,11 @@ class Parser implements ParserInterface
         }
 
         return $arguments;
+    }
+
+    protected function escapeXml($string)
+    {
+        return str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $string);
     }
 
     public function getDirectivePattern()
