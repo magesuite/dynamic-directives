@@ -6,6 +6,8 @@ class Parser implements ParserInterface
 {
     const DIRECTIVE_PATTERN = '/\{\{([a-zA-Z_]+)\s*([^}]+)*\}\}/si';
 
+    const ATTRIBUTE_PATTERN = '/\w+=\".*?\"/';
+
     /**
      * @var \MageSuite\DynamicDirectives\Model\Pool
      */
@@ -56,6 +58,7 @@ class Parser implements ParserInterface
 
     private function parseArguments($argumentsString)
     {
+        $argumentsString = $this->escapeSpecialCharsFromAttributesValues($argumentsString);
         $xml = new \SimpleXMLElement("<element $argumentsString/>");
 
         $arguments = [];
@@ -65,6 +68,35 @@ class Parser implements ParserInterface
         }
 
         return $arguments;
+    }
+
+    protected function escapeSpecialCharsFromAttributesValues($string)
+    {
+        $escapedString = '';
+
+        preg_match_all(self::ATTRIBUTE_PATTERN, $string, $attributes);
+        foreach($attributes[0] as $key => $attribute) {
+            list($attributeName, $attributeValue) = explode('=', $attribute);
+
+            $escapedString .= $this->getEscapedAttributeString($attributeName, $attributeValue);
+            if (!$this->isTheLastElement($key, $attributes[0])) {
+                $escapedString .= ' ';
+            }
+        }
+
+        return $escapedString;
+    }
+
+    protected function getEscapedAttributeString($attributeName, $attributeValue)
+    {
+        $escapedValue = htmlentities(trim($attributeValue, '"'));
+        return $attributeName . '="' . $escapedValue . '"';
+    }
+
+    protected function isTheLastElement($key, $array)
+    {
+        $lastElementKey = count($array) -1;
+        return $key == $lastElementKey;
     }
 
     public function getDirectivePattern()
