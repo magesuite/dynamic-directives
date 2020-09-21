@@ -75,6 +75,19 @@ class ParserTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ]
+            ],
+            [
+                '{{sample argument1="value1" argument2="value2" argument3="\'&><"}}',
+                [
+                    [
+                        'identifier' => 'sample',
+                        'arguments' => [
+                            'argument1' => 'value1',
+                            'argument2' => 'value2',
+                            'argument3' => '\'&><',
+                        ]
+                    ]
+                ]
             ]
         ];
     }

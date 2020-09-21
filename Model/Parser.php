@@ -78,7 +78,7 @@ class Parser implements ParserInterface
         foreach($attributes[0] as $key => $attribute) {
             list($attributeName, $attributeValue) = explode('=', $attribute);
 
-            $escapedString = $this->getEscapedAttributeString($attributeName, $attributeValue);
+            $escapedString .= $this->getEscapedAttributeString($attributeName, $attributeValue);
             if (!$this->isTheLastElement($key, $attributes[0])) {
                 $escapedString .= ' ';
             }
