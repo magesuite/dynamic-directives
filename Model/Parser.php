@@ -89,7 +89,7 @@ class Parser implements ParserInterface
 
     protected function getEscapedAttributeString($attributeName, $attributeValue)
     {
-        $escapedValue = htmlentities(trim($attributeValue, '"'));
+        $escapedValue = str_replace(['&', '"', '\'', '<', '>'], ['&amp;', '&quot;', '&apos;', '&lt;', '&gt;'], trim($attributeValue, '"'));
         return $attributeName . '="' . $escapedValue . '"';
     }
 
