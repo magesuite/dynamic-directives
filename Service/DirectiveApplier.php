@@ -21,6 +21,10 @@ class DirectiveApplier
 
     public function apply($text)
     {
+        if($text === null) {
+            return $text;
+        }
+
         $text = html_entity_decode($text);
         $directives = $this->directiveParser->getDirectives($text);
 
