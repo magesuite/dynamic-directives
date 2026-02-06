@@ -43,11 +43,11 @@ class ParserTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public static function textsWithDirectives()
+    public static function textsWithDirectives(): array
     {
         return [
             [
-            '{{sample argument1="value1" argument2="value2"}} some text ' . PHP_EOL . ' inside {{sample some="argument"}}',
+                '{{sample argument1="value1" argument2="value2"}} some text ' . PHP_EOL . ' inside {{sample some="argument"}}',
                 [
                     [
                         'identifier' => 'sample',
