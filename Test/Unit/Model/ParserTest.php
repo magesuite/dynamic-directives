@@ -21,9 +21,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
         $this->parser = $this->objectManager->create(\MageSuite\DynamicDirectives\Model\Parser::class);
     }
 
-    /**
-     * @dataProvider textsWithDirectives
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('textsWithDirectives')]
     public function testItParsesDirectives($text, $expectedDirectives)
     {
         $directives = $this->parser->getDirectives($text);
