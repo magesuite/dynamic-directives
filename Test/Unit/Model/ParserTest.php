@@ -86,6 +86,18 @@ class ParserTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ]
+            ],
+            [
+                '{{sample url="page.php?x=1&y=2" other="a=b"}}',
+                [
+                    [
+                        'identifier' => 'sample',
+                        'arguments' => [
+                            'url' => 'page.php?x=1&y=2',
+                            'other' => 'a=b',
+                        ]
+                    ]
+                ]
             ]
         ];
     }

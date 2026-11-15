@@ -76,7 +76,7 @@ class Parser implements ParserInterface
 
         preg_match_all(self::ATTRIBUTE_PATTERN, $string, $attributes);
         foreach($attributes[0] as $key => $attribute) {
-            list($attributeName, $attributeValue) = explode('=', $attribute);
+            list($attributeName, $attributeValue) = explode('=', $attribute, 2);
 
             $escapedString .= $this->getEscapedAttributeString($attributeName, $attributeValue);
             if (!$this->isTheLastElement($key, $attributes[0])) {
