@@ -5,22 +5,24 @@ namespace MageSuite\DynamicDirectives\Test\Unit\Model;
 class ParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
      * @var \MageSuite\DynamicDirectives\Model\Parser
      */
     protected $parser;
 
     public function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\ObjectManager::getInstance();
+        $directivePool = $this->createStub(\MageSuite\DynamicDirectives\Model\Pool::class);
+        $directivePool->method('getDefinedDirectivesIdentifiers')->willReturn(['sample']);
+        $directivePool->method('create')->willReturnCallback(function () {
+            return new \MageSuite\DynamicDirectives\Model\Directives\Sample();
+        });
 
-        $this->parser = $this->objectManager->create(\MageSuite\DynamicDirectives\Model\Parser::class);
+        $this->parser = new \MageSuite\DynamicDirectives\Model\Parser($directivePool);
     }
 
+    /**
+     * @dataProvider textsWithDirectives
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('textsWithDirectives')]
     public function testItParsesDirectives($text, $expectedDirectives)
     {

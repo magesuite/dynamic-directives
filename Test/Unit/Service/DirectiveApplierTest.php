@@ -5,11 +5,6 @@ namespace MageSuite\DynamicDirectives\Test\Unit\Service;
 class DirectiveApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\MageSuite\DynamicDirectives\Model\Parser
      */
     protected $directiveParserStub;
@@ -21,17 +16,9 @@ class DirectiveApplierTest extends \PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\ObjectManager::getInstance();
+        $this->directiveParserStub = $this->createStub(\MageSuite\DynamicDirectives\Model\Parser::class);
 
-        $this->directiveParserStub = $this
-            ->getMockBuilder(\MageSuite\DynamicDirectives\Model\Parser::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->directiveApplier = $this->objectManager->create(
-            \MageSuite\DynamicDirectives\Service\DirectiveApplier::class,
-            ['directiveParser' => $this->directiveParserStub]
-        );
+        $this->directiveApplier = new \MageSuite\DynamicDirectives\Service\DirectiveApplier($this->directiveParserStub);
     }
 
     public function testItReplacesDirectivesWithTheirValues()
@@ -45,7 +32,10 @@ class DirectiveApplierTest extends \PHPUnit\Framework\TestCase
 
         $textAfterDirectivesWereApplied = $this->directiveApplier->apply($text);
 
-        $this->assertEquals('first_directive_value' . PHP_EOL . ' some text ' . PHP_EOL . 'second_directive_value', $textAfterDirectivesWereApplied);
+        $this->assertEquals(
+            'first_directive_value' . PHP_EOL . ' some text ' . PHP_EOL . 'second_directive_value',
+            $textAfterDirectivesWereApplied
+        );
     }
 
     public function testItReplacesDirectivesWithEmptyTextWhenExceptionIsThrown()
@@ -63,9 +53,7 @@ class DirectiveApplierTest extends \PHPUnit\Framework\TestCase
 
     protected function createDirectiveStub(string $originalValue, string $value, $exceptionThrown = false)
     {
-        $directiveStub = $this->getMockBuilder(\MageSuite\DynamicDirectives\Model\DirectiveInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $directiveStub = $this->createStub(\MageSuite\DynamicDirectives\Model\DirectiveInterface::class);
 
         if ($exceptionThrown) {
             $directiveStub->method('getValue')->willThrowException(new \Exception('Generic exception'));
